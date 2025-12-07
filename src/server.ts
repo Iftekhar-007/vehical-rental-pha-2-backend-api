@@ -4,6 +4,7 @@ import initDB, { pool } from "./config/db";
 import userRoutes from "./modules/users/user.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import vehiclesRoutes from "./modules/vehicles/vehicle.routes";
+import bookingsRoutes from "./modules/bookings/booking.routes";
 const app = express();
 const port = config.port;
 
@@ -24,6 +25,10 @@ app.use("/api/v1/users", userRoutes);
 // ! vehicles api crud
 
 app.use("/api/v1/vehicles", vehiclesRoutes);
+
+// ! bookings api crud
+
+app.use("/api/v1/bookings", bookingsRoutes);
 
 // !auth api
 app.use("/api/v1/auth", authRoutes);
