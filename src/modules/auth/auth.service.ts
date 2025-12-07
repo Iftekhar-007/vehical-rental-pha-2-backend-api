@@ -6,7 +6,7 @@ import config from "../../config";
 const createUser = async (payload: Record<string, unknown>) => {
   const hashPass = await bcrypt.hash(payload.password as string, 10);
   const result = await pool.query(
-    `INSERT INTO users(name,email,password,phone,role) VALUES($1,$2,$3,$4,$5)`,
+    `INSERT INTO users(name,email,password,phone,role) VALUES($1,$2,$3,$4,$5) RETURNING *`,
     [payload.name, payload.email, hashPass, payload.phone, payload.role]
   );
   return result;
