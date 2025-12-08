@@ -7,11 +7,6 @@ const getAllUser = async () => {
   return result;
 };
 
-// const getSingleuser = async (id: string) => {
-//   const result = await pool.query(`SELECT * FROM users WHERE id=$1`, [id]);
-//   return result;
-// };
-
 const updateUser = async (
   name: string,
   email: string,
@@ -27,8 +22,25 @@ const updateUser = async (
   return result;
 };
 
+const deleteUser = async (userId: string) => {
+  const active = await pool.query(
+    `SELECT * FROM bookings WHERE customer_id=$1 AND status='active'`,
+    [userId]
+  );
+
+  if (active.rows.length > 0) {
+    return "user can't be deleted. Active bookings exists";
+  }
+
+  const result = await pool.query(`DELETE FROM users WHERE id=$1 RETURNING *`, [
+    userId,
+  ]);
+
+  return result;
+};
+
 export const userServices = {
   getAllUser,
-  // getSingleuser,
   updateUser,
+  deleteUser,
 };

@@ -17,25 +17,6 @@ const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
-// const getSingleUser = async (req: Request, res: Response) => {
-//
-
-//   try {
-//     const result = await userServices.getSingleuser(req.params.id);
-
-//     res.status(201).json({
-//       success: true,
-//       message: "user here",
-//       data: result.rows,
-//     });
-//   } catch (err: any) {
-//     res.status(504).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
-
 const updateUser = async (req: Request, res: Response) => {
   const { name, email, phone, role } = req.body;
 
@@ -62,10 +43,26 @@ const updateUser = async (req: Request, res: Response) => {
       req.params.id as string
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "User updated successfully",
       data: result.rows[0],
+    });
+  } catch (err: any) {
+    res.status(504).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const result = await userServices.deleteUser(req.params.userId as string);
+
+    res.status(200).json({
+      success: true,
+      message: "User Deleted successfully",
     });
   } catch (err: any) {
     res.status(504).json({
@@ -79,4 +76,5 @@ export const userControllers = {
   getAllUser,
   // getSingleUser,
   updateUser,
+  deleteUser,
 };

@@ -27,7 +27,7 @@ const createBookings = async (payload: Record<string, unknown>) => {
     (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
   );
 
-  const total_price = days * dailyPrice;
+  const total_price = Number(days * dailyPrice);
 
   const result = await pool.query(
     `INSERT INTO bookings(customer_id,vehicle_id,rent_start_date,rent_end_date,total_price,status) VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,

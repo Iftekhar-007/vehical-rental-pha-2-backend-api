@@ -10,6 +10,8 @@ router.get("/", userControllers.getAllUser);
 
 router.put("/:userId", auth("admin", "customer"), userControllers.updateUser);
 
+router.delete("/:userId", auth("admin"), userControllers.deleteUser);
+
 const userRoutes = router;
 
 export default userRoutes;

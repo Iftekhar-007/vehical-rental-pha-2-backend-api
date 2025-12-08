@@ -37,7 +37,7 @@ const logInUser = async (email: string, password: string) => {
 
   console.log(token);
 
-  return { user, token };
+  return { token, user };
 };
 
 export const authServices = {
