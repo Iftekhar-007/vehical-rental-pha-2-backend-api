@@ -6,86 +6,98 @@ const getAllUser = async () => {
   return result;
 };
 
-// const updateUser = async (
-//   name: string,
-//   email: string,
-//   phone: string,
-//   role: string,
-//   id: string
-// ) => {
-//   const result = await pool.query(
-//     `UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING *`,
-//     [name, email, phone, role, id]
-//   );
+const updateUser = async (
+  id: string,
+  name: string,
+  email: string,
+  phone: string,
+  role: string
+) => {
+  const roleValid = role || "customer";
+  const result = await pool.query(
+    `UPDATE users
+   SET
+     name = COALESCE($1, name),
+     email = COALESCE($2, email),
+     phone = COALESCE($3, phone),
+     role = COALESCE($4, role)
+   WHERE id = $5
+   RETURNING id,name,email,phone,role`,
+    [name || null, email || null, phone || null, role || null, id]
+  );
+  if (result.rowCount === 0) {
+    throw new Error("User Update Unsuccessfully");
+  }
+  return result;
+};
 
-//   return result;
+// export const updateCustomer = async (
+//   id: number,
+//   payload: { name?: string; email?: string; phone?: string }
+// ) => {
+//   const allowed = ["name", "email", "phone"] as const;
+//   console.log(id);
+//   const fields: string[] = [];
+//   const values: any[] = [];
+//   let i = 1;
+
+//   for (const key of allowed) {
+//     const value = payload[key as keyof typeof payload];
+
+//     if (value !== undefined && value !== null && value !== "") {
+//       fields.push(`${key} = $${i}`);
+//       values.push(value);
+//       i++;
+//     }
+//   }
+
+//   if (fields.length === 0) return null;
+
+//   values.push(id);
+
+//   const query = `
+//     UPDATE users
+//     SET ${fields.join(", ")}
+//     WHERE id=$${i}
+//     RETURNING id, name, email, phone, role
+//   `;
+
+//   const result = await pool.query(query, values);
+//   return result.rows[0] || null;
 // };
 
-export const updateCustomer = async (
-  id: number,
-  payload: { name?: string; email?: string; phone?: string }
-) => {
-  const allowed = ["name", "email", "phone"] as const;
+// export const updateAdmin = async (
+//   id: number,
+//   payload: { name?: string; email?: string; phone?: string; role?: string }
+// ) => {
+//   const allowed = ["name", "email", "phone", "role"] as const;
 
-  const fields: string[] = [];
-  const values: any[] = [];
-  let i = 1;
+//   const fields: string[] = [];
+//   const values: any[] = [];
+//   let i = 1;
 
-  for (const key of allowed) {
-    if (payload[key as keyof typeof payload]) {
-      fields.push(`${key} = $${i}`);
-      values.push(payload[key as keyof typeof payload]);
-      i++;
-    }
-  }
+//   for (const key of allowed) {
+//     if (payload[key as keyof typeof payload]) {
+//       fields.push(`${key} = $${i}`);
+//       values.push(payload[key as keyof typeof payload]);
+//       i++;
+//     }
+//   }
 
-  if (fields.length === 0) return null;
+//   if (fields.length === 0) return null;
 
-  values.push(id);
+//   values.push(id);
 
-  const query = `
-    UPDATE users 
-    SET ${fields.join(", ")}
-    WHERE id=$${i}
-    RETURNING id, name, email, phone, role
-  `;
+//   const query = `
+//     UPDATE users
+//     SET ${fields.join(", ")}
+//     WHERE id=$${i}
+//     RETURNING id, name, email, phone, role
+//   `;
 
-  const result = await pool.query(query, values);
-  return result.rows[0] || null;
-};
-
-export const updateAdmin = async (
-  id: number,
-  payload: { name?: string; email?: string; phone?: string; role?: string }
-) => {
-  const allowed = ["name", "email", "phone", "role"] as const;
-
-  const fields: string[] = [];
-  const values: any[] = [];
-  let i = 1;
-
-  for (const key of allowed) {
-    if (payload[key as keyof typeof payload]) {
-      fields.push(`${key} = $${i}`);
-      values.push(payload[key as keyof typeof payload]);
-      i++;
-    }
-  }
-
-  if (fields.length === 0) return null;
-
-  values.push(id);
-
-  const query = `
-    UPDATE users 
-    SET ${fields.join(", ")}
-    WHERE id=$${i}
-    RETURNING id, name, email, phone, role
-  `;
-
-  const result = await pool.query(query, values);
-  return result.rows[0] || null;
-};
+//   const result = await pool.query(query, values);
+//   return result.rows[0] || null;
+// };
 
 const deleteUser = async (userId: string) => {
   const active = await pool.query(
@@ -107,6 +119,5 @@ const deleteUser = async (userId: string) => {
 export const userServices = {
   getAllUser,
   deleteUser,
-  updateCustomer,
-  updateAdmin,
+  updateUser,
 };
