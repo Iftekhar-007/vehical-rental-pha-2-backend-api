@@ -4,9 +4,7 @@ import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
-router.get("/", userControllers.getAllUser);
-
-// router.get("/:id", userControllers.getSingleUser);
+router.get("/", auth("admin"), userControllers.getAllUser);
 
 router.put("/:userId", auth("admin", "customer"), userControllers.updateUser);
 

@@ -32,11 +32,17 @@ const createVehicle = async (payload: Record<string, unknown>) => {
 const getAllVehicles = async () => {
   const result = await pool.query(`SELECT * FROM vehicles`);
 
+  for (let vehicle of result.rows) {
+    vehicle.daily_rent_price = Number(vehicle.daily_rent_price);
+  }
+
   return result;
 };
 
 const getSingleVehicle = async (id: string) => {
   const result = await pool.query(`SELECT * FROM vehicles WHERE id=$1`, [id]);
+
+  result.rows[0].daily_rent_price = Number(result.rows[0].daily_rent_price);
 
   return result;
 };
@@ -53,6 +59,8 @@ const updateVehicle = async (id: string, payload: Record<string, unknown>) => {
       id,
     ]
   );
+
+  result.rows[0].daily_rent_price = Number(result.rows[0].daily_rent_price);
 
   return result;
 };

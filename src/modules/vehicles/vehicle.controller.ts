@@ -15,7 +15,7 @@ const createVehicle = async (req: Request, res: Response) => {
 
     res.status(201).json({
       success: true,
-      message: "vehicles registered successfully",
+      message: "Vehicle created successfully",
       data: result,
     });
   } catch (err: any) {
@@ -30,9 +30,17 @@ const getAllVehicles = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.getAllVehicles();
 
+    if (result.rows.length === 0) {
+      return {
+        success: true,
+        message: "No vehicles found",
+        data: [],
+      };
+    }
+
     res.status(201).json({
       success: true,
-      message: "vehicles",
+      message: "Vehicles retrieved successfully",
       data: result.rows,
     });
   } catch (err: any) {
@@ -55,7 +63,11 @@ const getSingleVehicle = async (req: Request, res: Response) => {
         message: "no vehicle found with this id",
       });
     } else {
-      res.send(result.rows[0]);
+      res.status(201).json({
+        success: true,
+        message: "Vehicle retrieved successfully",
+        data: result.rows[0],
+      });
     }
   } catch (err: any) {
     res.status(504).json({
@@ -86,7 +98,11 @@ const updateVehicle = async (req: Request, res: Response) => {
         message: "no vehicle found with this id",
       });
     } else {
-      res.send(result.rows[0]);
+      res.status(200).json({
+        success: true,
+        message: "Vehicle updated sucessfully",
+        data: result.rows[0],
+      });
     }
   } catch (err: any) {
     res.status(504).json({

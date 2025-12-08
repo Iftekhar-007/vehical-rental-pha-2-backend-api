@@ -1,25 +1,90 @@
 import { pool } from "../../config/db";
-import bcrypt from "bcryptjs";
 
 const getAllUser = async () => {
-  const result = await pool.query(`SELECT * FROM users`);
+  const result = await pool.query(`SELECT id,name,email,phone,role FROM users`);
 
   return result;
 };
 
-const updateUser = async (
-  name: string,
-  email: string,
-  phone: string,
-  role: string,
-  id: string
-) => {
-  const result = await pool.query(
-    `UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING *`,
-    [name, email, phone, role, id]
-  );
+// const updateUser = async (
+//   name: string,
+//   email: string,
+//   phone: string,
+//   role: string,
+//   id: string
+// ) => {
+//   const result = await pool.query(
+//     `UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING *`,
+//     [name, email, phone, role, id]
+//   );
 
-  return result;
+//   return result;
+// };
+
+export const updateCustomer = async (
+  id: number,
+  payload: { name?: string; email?: string; phone?: string }
+) => {
+  const allowed = ["name", "email", "phone"] as const;
+
+  const fields: string[] = [];
+  const values: any[] = [];
+  let i = 1;
+
+  for (const key of allowed) {
+    if (payload[key as keyof typeof payload]) {
+      fields.push(`${key} = $${i}`);
+      values.push(payload[key as keyof typeof payload]);
+      i++;
+    }
+  }
+
+  if (fields.length === 0) return null;
+
+  values.push(id);
+
+  const query = `
+    UPDATE users 
+    SET ${fields.join(", ")}
+    WHERE id=$${i}
+    RETURNING id, name, email, phone, role
+  `;
+
+  const result = await pool.query(query, values);
+  return result.rows[0] || null;
+};
+
+export const updateAdmin = async (
+  id: number,
+  payload: { name?: string; email?: string; phone?: string; role?: string }
+) => {
+  const allowed = ["name", "email", "phone", "role"] as const;
+
+  const fields: string[] = [];
+  const values: any[] = [];
+  let i = 1;
+
+  for (const key of allowed) {
+    if (payload[key as keyof typeof payload]) {
+      fields.push(`${key} = $${i}`);
+      values.push(payload[key as keyof typeof payload]);
+      i++;
+    }
+  }
+
+  if (fields.length === 0) return null;
+
+  values.push(id);
+
+  const query = `
+    UPDATE users 
+    SET ${fields.join(", ")}
+    WHERE id=$${i}
+    RETURNING id, name, email, phone, role
+  `;
+
+  const result = await pool.query(query, values);
+  return result.rows[0] || null;
 };
 
 const deleteUser = async (userId: string) => {
@@ -41,6 +106,7 @@ const deleteUser = async (userId: string) => {
 
 export const userServices = {
   getAllUser,
-  updateUser,
   deleteUser,
+  updateCustomer,
+  updateAdmin,
 };
