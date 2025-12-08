@@ -44,46 +44,6 @@ const updateUser = async (req, res) => {
         });
     }
 };
-// export const updateUser = async (req: Request, res: Response) => {
-//   try {
-//     const userId = Number(req.params.userId);
-//     if (isNaN(userId)) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Invalid userId" });
-//     }
-//     const loggedUser = req.user!;
-//     const payload = req.body;
-//     if (loggedUser.role === "customer" && loggedUser.id !== userId) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "Customers can update only their own profile",
-//       });
-//     }
-//     if (loggedUser.role === "customer" && payload.role) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "Customers cannot change their role",
-//       });
-//     }
-//     const result =
-//       loggedUser.role === "admin"
-//         ? await userServices.updateAdmin(userId, payload)
-//         : await userServices.updateCustomer(userId, payload);
-//     if (!result) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "User not found" });
-//     }
-//     res.status(200).json({
-//       success: true,
-//       message: "User updated successfully",
-//       data: result,
-//     });
-//   } catch (err: any) {
-//     res.status(500).json({ success: false, message: err.message });
-//   }
-// };
 const deleteUser = async (req, res) => {
     try {
         const result = await user_service_1.userServices.deleteUser(req.params.userId);
