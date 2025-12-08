@@ -74,7 +74,6 @@ const deleteUser = async (req: Request, res: Response) => {
 
 export const userControllers = {
   getAllUser,
-  // getSingleUser,
   updateUser,
   deleteUser,
 };
