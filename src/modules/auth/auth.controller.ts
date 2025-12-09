@@ -6,7 +6,7 @@ const createUser = async (req: Request, res: Response) => {
 
   try {
     const result = await authServices.createUser(req.body);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "user created successfully",
       data: result.rows[0],
@@ -25,7 +25,7 @@ const userLogIn = async (req: Request, res: Response) => {
   try {
     const result = await authServices.logInUser(email, password);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "user logged in successfully",
       data: result,

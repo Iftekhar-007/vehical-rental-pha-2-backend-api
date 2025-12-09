@@ -4,7 +4,7 @@ import { bookingsServices } from "./booking.service";
 const createBookings = async (req: Request, res: Response) => {
   try {
     const result = await bookingsServices.createBookings(req.body);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "booking created successfully",
       data: result,
@@ -28,7 +28,7 @@ const getBookings = async (req: Request, res: Response) => {
       result = await bookingsServices.getCustomerBooking(user!.id);
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Booking here",
       data: result?.rows,
@@ -56,7 +56,7 @@ const updateBooking = async (req: Request, res: Response) => {
       );
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Booking here",
       data: result,
