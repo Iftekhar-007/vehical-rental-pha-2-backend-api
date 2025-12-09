@@ -1,6 +1,6 @@
 ###<h2>Vehicle Rental System-Backend</h2>
 
-<h4>Live URL: </h4>
+<h4>Live URL: https://vehicle-alpha.vercel.app/</h4>
 <p>A backend service for managing vehicle rentals, customer bookings, admin operations, and secure authentication. Built with Node.js, Express.js, TypeScript, and JWT.</p>
 
 
@@ -61,8 +61,11 @@ src/
 
  ## ⚙️ Project Setup
 
-### **1️⃣ Clone the Repository**
-```bash
+
+ ```bash
+
+ **1️⃣ Clone the Repository**
+
 git clone (https://github.com/Iftekhar-007/vehical-rental-pha-2-backend-api)
 cd your-repo-name
 
