@@ -61,7 +61,7 @@ src/
 
  ## ⚙️ Project Setup
 
-### **1️⃣ Clone the Repository**
+ **1️⃣ Clone the Repository**
 ```bash
 git clone (https://github.com/Iftekhar-007/vehical-rental-pha-2-backend-api)
 cd your-repo-name
