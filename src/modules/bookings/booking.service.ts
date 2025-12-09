@@ -60,6 +60,10 @@ const getCustomerBooking = async (customerId: string) => {
     `SELECT * FROM bookings WHERE customer_id=$1`,
     [customerId]
   );
+
+  for (let booking of result.rows) {
+    booking.total_price = Number(booking.total_price);
+  }
   return result;
 };
 
